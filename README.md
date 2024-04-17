@@ -52,7 +52,7 @@ Now we can start building. Type out all of these commands in the terminal. You n
 ```
 git clone https://github.com/MercuryWorkshop/sh1mmer
 cd sh1mmer/wax
-wget https://dl.osu.bio/api/raw/?path=/SH1mmer/Chromebrew/chromebrew.tar.gz
+wget https://dl.darkn.bio/api/raw/?path=/SH1mmer/Chromebrew/chromebrew.tar.gz
 sudo bash wax.sh path/to/the/shim/you/downloaded.bin
 ```
 
