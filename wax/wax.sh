@@ -99,6 +99,12 @@ patch_sh1mmer() {
 		mkdir -p "$MNT_SH1MMER/chromebrew"
 		pv "$CHROMEBREW" | tar -xzf - --strip-components=1 -C "$MNT_SH1MMER/chromebrew"
 	fi
+ 
+	if [ -d ./recovery_images ]; then
+		log_info "Copying SMUT recovery images... increase sh1mmer part size if this fails"
+		mkdir -p $MNT_ARCH/recovery_images
+		cp -rv recovery_images/* $MNT_ARCH/recovery_images/
+  	fi
 
 	umount "$MNT_SH1MMER"
 	rmdir "$MNT_SH1MMER"
