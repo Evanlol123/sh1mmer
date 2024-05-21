@@ -61,7 +61,7 @@ mapname() {
 		'reset-kern-rollback.sh') echo -n "Reset kernel rollback version" ;;
 		'wp-disable.sh') echo -n "WP disable loop (for pencil method)" ;;
   		'kvs.sh') echo -n "Switch your kernel version (kvs)" ;;
-    		'gbbflags.sh') echo -n "Edit your GBB flags ;; 
+    		'gbbflags.sh') echo -n "Edit your GBB flags" ;; 
       		'wifi.sh') echo -n "Connect to wifi" ;;
       		'weston.sh') echo -n "Launch the weston Desktop Environment. REQUIRES A DEVSHIM" ;;
 		*) echo -n "$1" ;;
