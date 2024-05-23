@@ -30,7 +30,7 @@ mapname() {
     		'gbbflags.sh') echo -n "Edit your GBB flags" ;; 
       		'wifi.sh') echo -n "Connect to wifi" ;;
       		'weston.sh') echo -n "Launch the weston Desktop Environment. REQUIRES A DEVSHIM" ;;
-  		'smut.sh') echo -n "SMUT - Downgrade (you need to add your own images first)" ;;
+  		'recovery.sh') echo -n "Recovery/downgrade" ;;
 		*) echo -n "$1" ;;
 	esac
 }
