@@ -97,6 +97,22 @@ After injecting, you may continue to the "[Booting Into A Shim](#booting-into-a-
 
 ***
 
+### Adding recovery images
+
+1. Create a new directory in `/wax` named `recovery_images`
+
+2. Download **_and unzip_** recovery images for your board from [chrome100.dev](https://chrome100.dev)
+
+3. Place all your `.bin` recovery images in the `/wax/recovery_images` folder
+
+4. You should name your files well, as you will need to type out the name manually later.
+
+5. To build a shim with recovery images, add `-r recovery_images` to the wax command
+
+6. When you boot into the shim, go to payloads, and select `Recovery/downgrade`
+   
+***
+
 ### Booting Into A Shim
 
 Once you have injected your raw shim with SH1MMER, go into the Chromebook Recovery Utility, select the settings icon (⚙️), select `Use local image`, and then select your injected shim.
