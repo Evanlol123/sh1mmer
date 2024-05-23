@@ -1,6 +1,19 @@
 #!/bin/bash
 
-source /usr/sbin/sh1mmer_gui.sh
+# from wax/payloads/sh1mmer_bw/root/noarch/usr/sbin/sh1mmer_gui.sh
+# legacy doesn't have this, so we can't source it directly
+function setup() {
+	stty -echo # turn off showing of input
+	printf "\033[?25l" # turn off cursor so that it doesn't make holes in the image
+	printf "\033[2J\033[H" # clear screen
+	sleep 0.1
+}
+
+function cleanup() {
+	printf "\033[2J\033[H" # clear screen
+	printf "\033[?25h" # turn on cursor
+	stty echo
+}
 
 cleanup
 
@@ -44,51 +57,11 @@ opposite_num() {
 
 clear
 
-echo "Found the following recovery images:"
-ls -lh /usr/local/recovery_images
-echo
-echo "Starting SMUT in 5 seconds..."
-sleep 5
-
-clear
-
-# ascii art logo
-
-cat << EOF
-  _________.__    ____                                  
- /   _____/|  |__/_   | _____   _____   ___________     
- \_____  \ |  |  \|   |/     \ /     \_/ __ \_  __ \    
- /        \|   Y  \   |  Y Y  \  Y Y  \  ___/|  | \/    
-/_______  /|___|  /___|__|_|  /__|_|  /\___  >__|       
-        \/      \/          \/      \/     \/           
-   _____        .__   __  ._____.                  __   
-  /     \  __ __|  |_/  |_|__\_ |__   ____   _____/  |_ 
- /  \ /  \|  |  \  |\   __\  || __ \ /  _ \ /  _ \   __\\
-/    Y    \  |  /  |_|  | |  || \_\ (  <_> |  <_> )  |  
-\____|__  /____/|____/__| |__||___  /\____/ \____/|__|  
-        \/                        \/                    
-     ____ ______________.__.__  .__  __                     
-    |    |   \__    ___/|__|  | |__|/  |_ ___.__.           
-    |    |   / |    |   |  |  | |  \   __<   |  |           
-    |    |  /  |    |   |  |  |_|  ||  |  \___  |           
-    |______/   |____|   |__|____/__||__|  / ____|           
-                                          \/            
-                       or
-                   SMUT v1.3
-
-Select a utility to run:
- 1) Install fakemurk/murkmod recovery image to unused partition
- 2) Exit
-
-EOF
-
-read -p " > " choice
-
-reco_from_bin() {
+recover_from_image() {
     echo "Choose a recovery image:"
-    ls /usr/local/recovery_images
-    image=$(choose_image)
-    if [ -f "/usr/local/recovery_images/$image" ]; then
+    basename -a /recovery_images/*.bin
+    read -p " > " image
+    if [ -f "/recovery_images/$image" ]; then
         echo "Finding target partitions..."
         local dst=/dev/$(get_largest_nvme_namespace)
         if [[ $dst == /dev/sd* ]]; then
@@ -109,7 +82,7 @@ reco_from_bin() {
         local rootdev2=${dst}p${tgt_root2}
         echo "Targeting $kerndev, $rootdev, $kerndev2 and $rootdev2"
         local loop=$(losetup -f | tr -d '\r')
-        losetup -P "$loop" "/usr/local/recovery_images/$image"
+        losetup -P "$loop" "/recovery_images/$image"
         echo "Press enter if nothing broke, otherwise press Ctrl+C"
         read -r
         printf "Nuking partitions in 3 (this is your last chance to cancel)..."
@@ -131,29 +104,18 @@ reco_from_bin() {
         cgpt add "$dst" -i 4 -P 0
         cgpt add "$dst" -i 2 -P 0
         cgpt add "$dst" -i "$tgt_kern" -P 1
-        echo "Double-checking defog..."
-        defog
         vpd -i RW_VPD -s check_enrollment=0
         echo "Done!"
-        read "Press enter to reboot into the new install..."
-        reboot
+        echo ""
+        read "Rebooting in 3 seconds"
+        sleep 3
+        reboot -f
+        sleep infinity
     else
         echo "File not found!"
-        read "Press enter to continue..."
     fi
 }
 
-case $choice in
-    1)
-      reco_from_bin
-      ;;
-    2) 
-      echo "Bye!"
-      exit 0
-      ;;
-    *)
-      echo "Invalid choice!"
-      ;;
-esac
+recover_from_image
 
 setup
