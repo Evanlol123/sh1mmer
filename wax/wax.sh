@@ -5,7 +5,7 @@ SCRIPT_DIR=${SCRIPT_DIR:-"."}
 
 set -eE
 
-SCRIPT_DATE="2024-04-16"
+SCRIPT_DATE="2024-05-21"
 
 echo "┌─────────────────────────────────────────────────────────────────┐"
 echo "│ Welcome to wax, a shim modifying automation tool                │"
@@ -99,12 +99,15 @@ patch_sh1mmer() {
 		mkdir -p "$MNT_SH1MMER/chromebrew"
 		pv "$CHROMEBREW" | tar -xzf - --strip-components=1 -C "$MNT_SH1MMER/chromebrew"
 	fi
- 
-	if [ -d ./recovery_images ]; then
-		log_info "Copying SMUT recovery images... increase sh1mmer part size if this fails"
-		mkdir -p $MNT_ARCH/recovery_images
-		cp -rv recovery_images/* $MNT_ARCH/recovery_images/
-  	fi
+
+	if [ -n "$RECOVERY_IMAGES" ]; then
+		log_info "Copying recovery images... increase sh1mmer part size if this fails"
+		mkdir -p "$MNT_SH1MMER/recovery_images"
+		for COPY_IMAGE in $(basename -a "$RECOVERY_IMAGES/"*.bin); do
+			echo "$RECOVERY_IMAGES/$COPY_IMAGE"
+			pv "$RECOVERY_IMAGES/$COPY_IMAGE" | cat > "$MNT_SH1MMER/recovery_images/$COPY_IMAGE"
+		done
+	fi
 
 	umount "$MNT_SH1MMER"
 	rmdir "$MNT_SH1MMER"
@@ -153,6 +156,8 @@ get_flags() {
 	DEFINE_string sh1mmer_part_size "64M" "Partition size for payload(s)" "s"
 
 	DEFINE_string extra_payload_dir "${SCRIPT_DIR}/payloads" "Extra payload dir" "e"
+
+	DEFINE_string recovery_images "" "Recovery images dir" "r"
 
 	DEFINE_string firmware_dir "${SCRIPT_DIR}/firmware" "Insert firmware from dir" ""
 
@@ -224,8 +229,26 @@ if [ -n "$FLAGS_chromebrew" ]; then
 	log_info "Using chromebrew: $CHROMEBREW"
 fi
 
+if [ -n "$FLAGS_recovery_images" ]; then
+	RECOVERY_IMAGES="$FLAGS_recovery_images"
+	[ -d "$RECOVERY_IMAGES" ] || fail "$RECOVERY_IMAGES doesn't exist or isn't a directory"
+	log_info "Using recovery images: $RECOVERY_IMAGES"
+fi
+
 SH1MMER_PART_SIZE=$(parse_bytes "$FLAGS_sh1mmer_part_size") || fail "Could not parse size '$FLAGS_sh1mmer_part_size'"
 BOOTLOADER_PART_SIZE=$(parse_bytes "$FLAGS_bootloader_part_size") || fail "Could not parse size '$FLAGS_bootloader_part_size'"
+
+# dynamic sizing
+if [ -n "$CHROMEBREW" ]; then
+	log_info "Calculating chromebrew size"
+	CHROMEBREW_SIZE=$(gzip -l "$CHROMEBREW" | awk 'NR==2{print $2}')
+	SH1MMER_PART_SIZE=$((SH1MMER_PART_SIZE + CHROMEBREW_SIZE * 11 / 10)) # 10% bigger to fix size errors
+fi
+
+if [ -n "$RECOVERY_IMAGES" ]; then
+	RECOVERY_IMAGES_SIZE=$(du -sb "$RECOVERY_IMAGES" | awk '{print $1}')
+	SH1MMER_PART_SIZE=$((SH1MMER_PART_SIZE + RECOVERY_IMAGES_SIZE * 11 / 10)) # 10% bigger to fix size errors
+fi
 
 # sane backup table
 suppress sgdisk -e "$IMAGE" 2>&1 | sed 's/\a//g'
