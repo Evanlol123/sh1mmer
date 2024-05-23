@@ -10,9 +10,10 @@ showbg Disclaimer.png
 sleep 1
 read -rsn1
 
-mkdir -p /mnt/sh1mmer /usr/local
+mkdir -p /mnt/sh1mmer /usr/local /recovery_images
 if mount /dev/disk/by-label/SH1MMER /mnt/sh1mmer >/dev/null 2>&1; then
-	mount --bind /mnt/sh1mmer/chromebrew /usr/local >/dev/null 2>&1 || umount /mnt/sh1mmer
+	mount --bind /mnt/sh1mmer/chromebrew /usr/local >/dev/null 2>&1
+	mount --bind /mnt/sh1mmer/recovery_images /recovery_images >/dev/null 2>&1
 fi
 
 loadmenu() {
