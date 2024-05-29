@@ -64,6 +64,7 @@ mapname() {
     		'gbbflags.sh') echo -n "Edit your GBB flags" ;; 
       		'wifi.sh') echo -n "Connect to wifi" ;;
       		'weston.sh') echo -n "Launch the weston Desktop Environment. REQUIRES A DEVSHIM" ;;
+		'csmiterenroll.sh') echo -n "Renroll for cryptosmite if regular reprovision doesn't work. Requires that you don't need an admin to enroll" ;;
 		*) echo -n "$1" ;;
 	esac
 }
