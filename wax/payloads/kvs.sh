@@ -58,4 +58,3 @@ echo "Please Enter Target kernver (0-3)"
         *)
           echo "That isnt a kernver dumbass" ;;
       esac
-      exit 1
