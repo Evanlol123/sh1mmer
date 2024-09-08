@@ -2,7 +2,7 @@
 
 set -eE
 
-SCRIPT_DATE="[2024-04-16]"
+SCRIPT_DATE="[2024-09-07]"
 
 COLOR_RESET="\033[0m"
 COLOR_BLACK_B="\033[1;30m"
@@ -221,7 +221,6 @@ while :; do
 	[rR]) run_task reprovision ;;
 	[mM]) run_task unblock_devmode ;;
 	[uU]) run_task enable_usb_boot ;;
-	[gG]) run_task reset_gbb_flags ;;
 	[hH]) run_task touch_developer_mode ;;
 	[vV]) run_task disable_verity ;;
 	[tT]) run_task chromeos-tpm-recovery ;;
