@@ -59,6 +59,7 @@ mapname() {
 		'defog.sh') echo -n "Set GBB flags to allow devmode and unenrollment on r112-113. WRITE PROTECTION MUST BE DISABLED" ;;
 		'mrchromebox.sh') echo -n "MrChromebox firmware-util.sh" ;;
 		'reset-kern-rollback.sh') echo -n "Reset kernel rollback version" ;;
+  		'recovery.sh') echo -n "Recovery/downgrade" ;;
 		'wp-disable.sh') echo -n "WP disable loop (for pencil method)" ;;
   		'kvs.sh') echo -n "Switch your kernel version (kvs)" ;;
     		'gbbflags.sh') echo -n "Edit your GBB flags" ;; 
