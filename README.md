@@ -33,6 +33,19 @@ pyro, reks, sentry, stout, strongbad, tidus, ultima, volteer, zork
 If it's not, good luck. You'll have to try and call up your OEM and demand the files from them, which they are most unlikely to give to you.
 
 ***
+### Adding recovery images
+
+1. Create a new directory in `/wax` named `recovery_images`
+
+2. Download **_and unzip_** recovery images for your board from [chrome100.dev](https://chrome100.dev)
+
+3. Place all your `.bin` recovery images in the `/wax/recovery_images` folder
+
+4. You should name your files well, as you will need to type out the name manually later.
+
+5. To build a shim with recovery images, add `-r recovery_images` to the wax command
+
+6. When you boot into the shim, go to payloads, and select `Recovery/downgrade`
 
 ### Building A Beautiful World Shim
 
@@ -56,7 +69,7 @@ This will build a beautiful world mini shim. If you want to add chromebrew, do t
 ```
 git clone https://github.com/Evanlol123/sh1mmer
 cd sh1mmer/wax
-wget https://dl.darkn.bio/api/raw/?path=/Chromebrew/chromebrew.tar.gz
+wget --content-disposition https://dl.darkn.bio/api/raw/?path=/Chromebrew/chromebrew.tar.gz
 sudo bash wax.sh -i path/to/the/shim/you/downloaded.bin --chromebrew chromebrew.tar.gz -s 4G
 ```
 
