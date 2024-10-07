@@ -18,6 +18,9 @@ We can edit the other partitions to our will as long as we remove the forced rea
 
 ## How do I use it?
 
+> [!NOTE]
+> [dl.sh1mmer.me](https://dl.sh1mmer.me) has been taken down, so you'll need to find a site rehosting the RMA shims alongside Chromebrew.
+
 Here's how you do that.
 First, you need to know your Chromebook's board. Go to `chrome://version` on your Chromebook and copy the word after `stable-channel`.
 If `chrome://version` is blocked, you can search up your Chromebook's model name on [chrome100](https://chrome100.dev)
@@ -26,9 +29,9 @@ and see what board it corresponds to. **DO NOT DOWNLOAD A RECOVERY IMAGE FROM [c
 If your board name is in the list below, great! Find the RAW RMA shim corresponding to your board online.
 We can no longer provide raw RMA shims due to legal reasons. [**More information here**](https://discord.gg/egWXwEDWKP).
 
-ambassador, brask, brya, clapper, coral, corsola, dedede, enguarde, glimmer,
-grunt, hana, hatch, jacuzzi, kefka, kukui, lulu, nami, nissa, octopus, orco,
-pyro, reks, sentry, stout, strongbad, tidus, ultima, volteer, zork
+ambassador, banon, brask, brya, clapper, coral, corsola, cyan, dedede, edgar, elm, enguarde, fizz,
+glimmer, grunt, hana, hatch, jacuzzi, kalista, kefka, kukui, lulu, nami, nissa, octopus, orco, puff,
+pyro, reef, reks, relm, sand, sentry, stout, strongbad, tidus, trogdor, ultima, volteer, zork
 
 If it's not, good luck. You'll have to try and call up your OEM and demand the files from them, which they are most unlikely to give to you.
 
@@ -38,7 +41,7 @@ If it's not, good luck. You'll have to try and call up your OEM and demand the f
 
 <!--
 > [!IMPORTANT]
-> If you're using `coral`, `hana`, or some other older (pre-frecon) boards: <br />
+> If you're using `hana` or some other older (pre-frecon) board: <br />
 > **DO NOT FOLLOW THESE INSTRUCTIONS!** Instead, skip to the "[Building A Legacy Shim](#building-a-legacy-shim)" section.
 -->
 
@@ -47,14 +50,14 @@ You need to be on Linux or WSL2 and have the following packages installed: `git`
 You may need to install additional packages, which the script will prompt you to do.
 
 ```
-git clone https://github.com/Evanlol123/sh1mmer
+git clone https://github.com/MercuryWorkshop/sh1mmer
 cd sh1mmer/wax
 sudo bash wax.sh -i path/to/the/shim/you/downloaded.bin
 ```
 This will build a beautiful world mini shim. If you want to add chromebrew, do the following:
 
 ```
-git clone https://github.com/Evanlol123/sh1mmer
+git clone https://github.com/MercuryWorkshop/sh1mmer
 cd sh1mmer/wax
 wget https://dl.darkn.bio/api/raw/?path=/Chromebrew/chromebrew.tar.gz
 sudo bash wax.sh -i path/to/the/shim/you/downloaded.bin --chromebrew chromebrew.tar.gz -s 4G
@@ -81,7 +84,7 @@ This makes it impossible for the Beautiful World GUI to work and thus a legacy C
 Type out all of these commands in the terminal.
 
 ```
-git clone https://github.com/Evanlol123/sh1mmer
+git clone https://github.com/MercuryWorkshop/sh1mmer
 cd sh1mmer/wax
 sudo bash wax.sh -i path/to/the/shim/you/downloaded.bin -p legacy
 ```
@@ -112,7 +115,28 @@ From here, you can play around with the options and do what you want.
 
 ***
 
-### The Fog....
+### CryptoSmite
+SH1MMER has been patched by Google™️ since v111, but since then a new unenrollment exploit for v119 and lower has released: CryptoSmite.
+By default, this is bundled inside payloads in all SH1MMER shims, and all you need to do is flash a SH1MMER shim, go into Payloads, and run `cryptosmite.sh`.
+
+<details>
+<summary>CryptoSmite Instructions</summary>
+
+1. Download a SH1MMER Prebuilt image here: [dl.darkn.bio](<https://dl.darkn.bio/SH1mmer/Prebuilt/>), then flash a USB with it using [CRU](https://chromewebstore.google.com/detail/chromebook-recovery-utili/pocpnlppkickgojjlmhdmidojbmbodfm).
+2. Disable OS verification *(blocked or not, doesn't matter)*, and boot into the shim.
+3. Navigate to Payloads and navigate to CryptoSmite using the arrow keys, then press `Enter`.
+4. Type in `Y` then press enter, and it'll automatically reboot upon completion.
+5. Proceed through the setup partially till you get to the Add Account Screen.
+   - If you see an update prompt, reboot then press `CTRL + ALT + E` on the Wi-Fi screen.
+     - This *should* allow skipping the update, or make it not appear at all.
+8. Powerwash the Chromebook at the "Add Account" screen. Afterwards, it'll be fully unenrolled.
+
+</details>
+
+### The Fog
+> [!NOTE]
+> It is recommended to use CryptoSmite instead if you're only affected by "_The Fog_" and nothing else.
+> "_The Fog_" instructions are old, however that doesn't mean you can't try it _**if**_ you don't wish to use CryptoSmite.
 
 Downgrading and unenrollment has been patched by Google™️.
 If your Chromebook has never updated to version 112 (or newer) before (check in `chrome://version`),
@@ -135,6 +159,10 @@ This will bypass both issues of The Fog and The Tsunami, however further caveats
 
 ### The Tsunami
 
+> [!WARNING]
+> It is **_VERY_** recommended to use CryptoSmite instead if you're on v119 or lower.
+> The instructions to do "_The Tsunami_" are extremely dangerous, even with a chip flasher. **Proceed with caution if you can't use CryptoSmite.**
+
 Disabling write protection has also been patched by Google™️.
 If your Chromebook has never updated to version 114 (or newer) before (check in `chrome://version`),
 then you can ignore this and follow the [Unpatch](https://sh1mmer.me/#fog:~:text=v111) instructions. If not, disabling 
@@ -143,8 +171,10 @@ write protection will not work as normal.
 <details>
 <summary>Tsunami Bypass Details</summary>
 
-If your Chromebook is below ChromeOS version 120, unenrollment is still possible by using [cryptosmite](https://github.com/FWSmasher/CryptoSmite).
-Cryptosmite is now included as an extra payload for all shims.
+If your Chromebook is on version 114 or newer,
+unenrollment is still possible by [bridging two pins on the firmware chip](https://blog.darkn.bio/blog/the-tsunami#bypassing-instructions).
+On most devices, this will require you to take off the back of the Chromebook and then use a piece of tinfoil, wire, or other conductive material to bridge the two pins.
+This bypass is **not recommended** as you risk permanently bricking the Chromebook, please use [E-Halcyon](https://fog.gay) instead.
 
 </details>
 
