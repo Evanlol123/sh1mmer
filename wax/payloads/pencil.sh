@@ -2,7 +2,7 @@
 . wp-disable.sh
 
 status "Disabling firmware write-protect"
-pencilloop
+wp_disable
 status "Setting GBB flags to 0x80b9"
 set_gbb_flags.sh 0x80b9
 status "Resetting kernver"
